@@ -84,6 +84,8 @@ public class UASApplication {
         System.out.print("Masukan email user yang akan dihapus: ");
         String email = scanner.nextLine();
 
+        userRepository.deleteUser(email);
+
     }
 
     private void updateUser(Scanner scanner) {
@@ -94,10 +96,16 @@ public class UASApplication {
         String username = scanner.nextLine();
         System.out.print("Masukan password baru: ");
         String password = scanner.nextLine();
+
+        userRepository.updateUser(email, username, password);
     }
 
     private void tampilkanSemuaUser() {
-
+        List<User> users = userRepository.findAll();
+        System.out.println("Email | Username | Password");
+        for (User user : users) {
+            System.out.println(user.getEmail() + " | " + user.getUsername() + " | " + user.getPassword());
+        }
     }
 
     private void exitApps() {
@@ -111,6 +119,10 @@ public class UASApplication {
         String username = scanner.nextLine();
         System.out.print("Enter password: ");
         String password = scanner.nextLine();
+
+        if (userRepository.authenticateUser(username, password)) {
+            SessionManager.getInstance().login();
+        }
     }
 
     private void insertUser(Scanner scanner) {
@@ -121,6 +133,9 @@ public class UASApplication {
         String username = scanner.nextLine();
         System.out.print("Enter password: ");
         String password = scanner.nextLine();
+
+        userRepository.insertUser(email, username, password);
+
     }
 
     public static void main(String[] args) {
